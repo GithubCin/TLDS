@@ -7,8 +7,8 @@ from models import User
 
 #表单
 class UserForm(forms.Form):
-    username = forms.CharField(label='用户名',max_length=100)
-    password = forms.CharField(label='密码',widget=forms.PasswordInput())
+    username = forms.CharField(label='用户名',max_length=100,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'用户名'}))
+    password = forms.CharField(label='密码',widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'密码'}),)
 
 
 #注册
@@ -21,10 +21,10 @@ def regist(req):
             password = uf.cleaned_data['password']
             #添加到数据库
             User.objects.create(username= username,password=password)
-            return HttpResponse('regist success!!')
+            return HttpResponseRedirect('/cuser/')
     else:
         uf = UserForm()
-    return render_to_response('regist.html',{'uf':uf}, context_instance=RequestContext(req))
+    return render_to_response('cuser/regist.html',{'uf':uf}, context_instance=RequestContext(req))
 
 #登陆
 def login(req):
@@ -38,13 +38,13 @@ def login(req):
             user = User.objects.filter(username__exact = username,password__exact = password)
             if user:
                 #比较成功，跳转index
-                response = HttpResponseRedirect('/online/index/')
+                response = HttpResponseRedirect('/cuser/index/')
                 #将username写入浏览器cookie,失效时间为3600
                 response.set_cookie('username',username,3600)
                 return response
             else:
                 #比较失败，还在login
-                return HttpResponseRedirect('/online/login/')
+                return HttpResponseRedirect('/cuser/login/')
     else:
         uf = UserForm()
     return render_to_response('cuser/login.html',{'uf':uf},context_instance=RequestContext(req))
@@ -52,7 +52,7 @@ def login(req):
 #登陆成功
 def index(req):
     username = req.COOKIES.get('username','')
-    return render_to_response('index.html' ,{'username':username})
+    return render_to_response('cuser/index.html' ,{'username':username})
 
 #退出
 def logout(req):
