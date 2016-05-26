@@ -19,4 +19,8 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cuser/', include('cuser.urls')),
+    url(r'^$', 'distribution.views.index'),
+    url(r'^index/', 'distribution.views.index'),
+    url(r'^order_add/', 'distribution.views.orderadd'),
+    url(r'^order_list/', 'distribution.views.orderlist'),
 ]

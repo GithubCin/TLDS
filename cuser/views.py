@@ -38,7 +38,7 @@ def login(req):
             user = User.objects.filter(username__exact = username,password__exact = password)
             if user:
                 #比较成功，跳转index
-                response = HttpResponseRedirect('/cuser/index/')
+                response = HttpResponseRedirect('/index/')
                 #将username写入浏览器cookie,失效时间为3600
                 response.set_cookie('username',username,3600)
                 return response
@@ -52,7 +52,7 @@ def login(req):
 #登陆成功
 def index(req):
     username = req.COOKIES.get('username','')
-    return render_to_response('cuser/index.html' ,{'username':username})
+    return render_to_response('index.html' ,{'username':username})
 
 #退出
 def logout(req):
