@@ -21,6 +21,16 @@ class OrderForm(forms.Form):
     mateprice = forms.CharField(label='配送价格',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
     totalprice = forms.CharField(label='总价格',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
 
+class TabaccoForm(forms.Form):
+    bagnum = forms.CharField(label='封装袋号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    unitprice = forms.CharField(label='烟草单价',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+
+class StateForm(forms.Form):
+    tobacconame = forms.CharField(label='封装袋号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    order_id = forms.CharField(label='订单号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    nowposition = forms.CharField(label='当前地点',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    nextposition = forms.CharField(label='下一目的地',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    arrivetime = forms.CharField(label='到达时间',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
 
 
 def index (request):
@@ -55,3 +65,42 @@ def orderadd(request):
 def orderlist (request):
     orderlist = Order.objects.all()
     return render_to_response('order_list.html', {'orderlist':orderlist},context_instance=RequestContext(request))
+def tobaccoGoodadd(request):
+    if request.method == 'POST':
+        uf = TabaccoForm(request.POST)
+        if uf.is_valid():
+            #获得表单数据
+            tobacconame = uf.cleaned_data['tobacconame']
+            unitprice = uf.cleaned_data['unitprice']
+            #添加到数据库
+            TobaccoGood.objects.create(tobacconame= tobacconame,unitprice=unitprice)
+            messages = 'success'
+            return HttpResponseRedirect('/tobaccoGood_add')
+    else:
+        messages = ''
+        uf = TabaccoForm()
+    return render_to_response('tobacco_add.html',{'uf':uf,'messages':messages}, context_instance=RequestContext(request))
+def tobaccoGoodlist (request):
+    tabaccolist = TobaccoGood.objects.all()
+    return render_to_response('tobacco_list.html', {'tabaccolist':tabaccolist},context_instance=RequestContext(request))
+def stateadd(request):
+    if request.method == 'POST':
+        uf = StateForm(request.POST)
+        if uf.is_valid():
+            #获得表单数据
+            bagnum = uf.cleaned_data['bagnum']
+            order_id = uf.cleaned_data['order_id']
+            nowposition = uf.cleaned_data['nowposition']
+            nextposition = uf.cleaned_data['nextposition']
+            arrivetime = uf.cleaned_data['arrivetime']
+            #添加到数据库
+            GoodState.objects.create(bagnum= bagnum,order_id=order_id,nowposition= nowposition,nextposition= nextposition,arrivetime= arrivetime,)
+            messages = 'success'
+            return HttpResponseRedirect('/state_add')
+    else:
+        messages = ''
+        uf = StateForm()
+    return render_to_response('state_add.html',{'uf':uf,'messages':messages}, context_instance=RequestContext(request))
+def statelist (request):
+    statelist = GoodState.objects.all()
+    return render_to_response('state_list.html', {'statelist':statelist},context_instance=RequestContext(request))

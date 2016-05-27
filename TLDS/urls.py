@@ -23,4 +23,9 @@ urlpatterns = [
     url(r'^index/', 'distribution.views.index'),
     url(r'^order_add/', 'distribution.views.orderadd'),
     url(r'^order_list/', 'distribution.views.orderlist'),
+    url(r'^tobaccoGood_add/', 'distribution.views.tobaccoGoodadd'),
+    url(r'^tobaccoGood_list/', 'distribution.views.tobaccoGoodlist'),
+    url(r'^state_add/', 'distribution.views.stateadd'),
+    url(r'^state_list/', 'distribution.views.statelist'),
+
 ]
