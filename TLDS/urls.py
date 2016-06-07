@@ -23,9 +23,15 @@ urlpatterns = [
     url(r'^index/', 'distribution.views.index'),
     url(r'^order_add/', 'distribution.views.orderadd'),
     url(r'^order_list/', 'distribution.views.orderlist'),
+    url(r'^order_update/(\d{1,6})/$', 'distribution.views.orderupdate'),
+    url(r'^order_delete/(\d{1,6})/$', 'distribution.views.orderdelete'),
     url(r'^tobaccoGood_add/', 'distribution.views.tobaccoGoodadd'),
     url(r'^tobaccoGood_list/', 'distribution.views.tobaccoGoodlist'),
+    url(r'^tobaccoGood_update/(\d{1,6})/$', 'distribution.views.tobaccoGoodupdate'),
+    url(r'^tobaccoGood_delete/(\d{1,6})/$', 'distribution.views.tobaccoGooddelete'),
     url(r'^state_add/', 'distribution.views.stateadd'),
     url(r'^state_list/', 'distribution.views.statelist'),
+    url(r'^state_update/(\d{1,6})/$', 'distribution.views.stateupdate'),
+    url(r'^state_delete/(\d{1,6})/$', 'distribution.views.statedelete'),
 
 ]

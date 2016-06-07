@@ -8,7 +8,7 @@
 	   <!-- Page heading -->
       <div class="page-head">
         <!-- Page heading -->
-        <h2 class="pull-left">物流信息
+        <h2 class="pull-left">订单
           <!-- page meta -->
           <span class="page-meta">增加</span>
         </h2>
@@ -19,7 +19,7 @@
           <a href="index.html"><i class="icon-home"></i> 首页</a>
           <!-- Divider -->
           <span class="divider">/</span>
-          <a href="#" class="bread-current">物流信息</a>
+          <a href="#" class="bread-current">烟草信息</a>
         </div>
 
         <div class="clearfix"></div>
@@ -53,12 +53,12 @@
                 <div class="widget-content">
                   <div class="padd">
 
-                    <h6>录入物流信息</h6>
+                    <h6>录入烟草信息</h6>
                     <hr />
                     <!-- Form starts.  -->
                     <form method = 'post' enctype="multipart/form-data">
                        {% csrf_token %}
-                         {{uf.de}}
+                         {{uf.as_p}}
                     <input type="submit" value = "ok" />
                     </form>
                   </div>

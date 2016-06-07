@@ -22,11 +22,11 @@ class OrderForm(forms.Form):
     totalprice = forms.CharField(label='总价格',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
 
 class TabaccoForm(forms.Form):
-    bagnum = forms.CharField(label='封装袋号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    tobacconame = forms.CharField(label='烟草名称',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
     unitprice = forms.CharField(label='烟草单价',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
 
 class StateForm(forms.Form):
-    tobacconame = forms.CharField(label='封装袋号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    bagnum = forms.CharField(label='封装袋号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
     order_id = forms.CharField(label='订单号',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
     nowposition = forms.CharField(label='当前地点',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
     nextposition = forms.CharField(label='下一目的地',max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -65,6 +65,46 @@ def orderadd(request):
 def orderlist (request):
     orderlist = Order.objects.all()
     return render_to_response('order_list.html', {'orderlist':orderlist},context_instance=RequestContext(request))
+
+def orderupdate(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    order = Order.objects.get(id=offset)
+    if request.method == 'POST':
+        uf = OrderForm(request.POST)
+        if uf.is_valid():
+            #获得表单数据
+            order.destn = uf.cleaned_data['destn']
+            order.node_id = uf.cleaned_data['node_id']
+            order.acceptdate = uf.cleaned_data['acceptdate']
+            order.user_id = uf.cleaned_data['user_id']
+            order.accepter = uf.cleaned_data['accepter']
+            order.accepterphonenumber = uf.cleaned_data['accepterphonenumber']
+            order.price = uf.cleaned_data['price']
+            order.scope = uf.cleaned_data['scope']
+            order.senddate = uf.cleaned_data['senddate']
+            order.address = uf.cleaned_data['address']
+            order.mateprice = uf.cleaned_data['mateprice']
+            order.totalprice = uf.cleaned_data['totalprice']
+            order.save()
+            messages = 'success'
+            return HttpResponseRedirect('/order_list')
+    else:
+        messages = ''
+        uf = OrderForm(initial={'destn': order.destn,'node_id': order.node_id,'acceptdate': order.acceptdate,'user_id': order.user_id,'accepter': order.accepter,'accepterphonenumber': order.accepterphonenumber,'price': order.price,'scope': order.scope,'senddate': order.senddate,'address': order.address,'mateprice': order.mateprice,'totalprice': order.totalprice, })
+
+    return render_to_response('order_update.html',{'uf':uf,'order':order}, context_instance=RequestContext(request))
+def orderdelete(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    order = Order.objects.get(id=offset)
+    order.delete()
+    return HttpResponseRedirect('/order_list')
+
 def tobaccoGoodadd(request):
     if request.method == 'POST':
         uf = TabaccoForm(request.POST)
@@ -83,6 +123,36 @@ def tobaccoGoodadd(request):
 def tobaccoGoodlist (request):
     tabaccolist = TobaccoGood.objects.all()
     return render_to_response('tobacco_list.html', {'tabaccolist':tabaccolist},context_instance=RequestContext(request))
+def tobaccoGoodupdate(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    tobaccoGood = TobaccoGood.objects.get(id=offset)
+    if request.method == 'POST':
+        uf = TabaccoForm(request.POST)
+        if uf.is_valid():
+            #获得表单数据
+            tobaccoGood.tobacconame = uf.cleaned_data['tobacconame']
+            tobaccoGood.unitprice = uf.cleaned_data['unitprice']
+            tobaccoGood.save()
+            messages = 'success'
+            return HttpResponseRedirect('/tobaccoGood_list')
+    else:
+        messages = ''
+        uf = TabaccoForm(initial={'tobacconame': tobaccoGood.tobacconame,'unitprice': tobaccoGood.unitprice, })
+
+    return render_to_response('tobacco_update.html',{'uf':uf,}, context_instance=RequestContext(request))
+def tobaccoGooddelete(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    tobaccoGood = TobaccoGood.objects.get(id=offset)
+    tobaccoGood.delete()
+    return HttpResponseRedirect('/tobaccoGood_list')
+
+
 def stateadd(request):
     if request.method == 'POST':
         uf = StateForm(request.POST)
@@ -104,3 +174,35 @@ def stateadd(request):
 def statelist (request):
     statelist = GoodState.objects.all()
     return render_to_response('state_list.html', {'statelist':statelist},context_instance=RequestContext(request))
+def stateupdate(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    goodState = GoodState.objects.get(id=offset)
+    if request.method == 'POST':
+        uf = StateForm(request.POST)
+        if uf.is_valid():
+            #获得表单数据
+            goodState.bagnum = uf.cleaned_data['bagnum']
+            goodState.order_id = uf.cleaned_data['order_id']
+            goodState.nowposition = uf.cleaned_data['nowposition']
+            goodState.nextposition = uf.cleaned_data['nextposition']
+            goodState.arrivetime = uf.cleaned_data['arrivetime']
+            goodState.save()
+            messages = 'success'
+            return HttpResponseRedirect('/state_list')
+    else:
+        messages = ''
+        uf = StateForm(initial={'bagnum': goodState.bagnum,'order_id': goodState.order_id, 'nowposition': goodState.nowposition,'nextposition': goodState.nextposition,'arrivetime': goodState.arrivetime,})
+
+    return render_to_response('state_update.html',{'uf':uf,}, context_instance=RequestContext(request))
+def statedelete(request,offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404()
+    statelist = GoodState.objects.get(id=offset)
+    statelist.delete()
+    return HttpResponseRedirect('/state_list')
+

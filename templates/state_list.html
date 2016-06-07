@@ -63,8 +63,9 @@
                           <td>{{f.arrivetime}}</td>
                           <td>
 
-                              <button class="btn btn-xs btn-default"><i class="icon-pencil"></i> </button>
-                              <button class="btn btn-xs btn-default"><i class="icon-remove"></i> </button>
+                             <button class="btn btn-xs btn-default" onclick="javascript:window.location.href='/state_update/{{f.id}}';"><i class="icon-pencil"></i> </button>
+
+                              <button class="btn btn-xs btn-default"  onclick="if(confirm('确认删除吗？'))location.href='/state_delete/{{f.id}}';"><i class="icon-remove"></i> </button>
 
                           </td>
                         </tr>
